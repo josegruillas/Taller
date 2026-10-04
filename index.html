@@ -1972,11 +1972,6 @@ document
 
 });
 
-<button id="btnInicio" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆️ INICIO</button>
-/* =========================================================
-   INICIO
-========================================================= */
-
 recuperarFichas();
 
 
@@ -1984,6 +1979,6 @@ recuperarFichas();
 <script>
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}
 </script>
-
+<button id="btnInicio" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="position:fixed;bottom:20px;right:20px;width:90px;padding:10px;font-size:14px;background:white;border:3px solid black;border-radius:25px;z-index:99999;">⬆️ INICIO</button>
 </body>
 </html>
