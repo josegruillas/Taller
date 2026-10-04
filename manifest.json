@@ -1,13 +1,21 @@
 {
-  "name": "AUTO-LOLO Taller",
+  "name": "AUTO-LOLO V23",
   "short_name": "AUTO-LOLO",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#0f3d9e",
   "theme_color": "#0f3d9e",
-  "icons": [{
-    "src": "https://cdn-icons-png.flaticon.com/512/3774/3774083.png",
-    "sizes": "512x512",
-    "type": "image/png"
-  }]
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }
