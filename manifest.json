@@ -1,0 +1,13 @@
+{
+  "name": "AUTO-LOLO Taller",
+  "short_name": "AUTO-LOLO",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0f3d9e",
+  "theme_color": "#0f3d9e",
+  "icons": [{
+    "src": "https://cdn-icons-png.flaticon.com/512/3774/3774083.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }]
+}
