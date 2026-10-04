@@ -1,0 +1,1965 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AUTO-LOLO V23</title>
+
+<style>
+*{box-sizing:border-box;font-family:Arial Black,Arial,sans-serif}
+
+body{
+  margin:0;
+  background:#0f3d9e;
+  padding:0 0 200px
+}
+
+h1{
+  text-align:center;
+  color:white;
+  font-size:32px;
+  margin:12px 0
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+  padding:0 10px
+}
+
+.btn{
+  padding:12px 5px;
+  border:3px solid black;
+  border-radius:12px;
+  font-weight:bold;
+  cursor:pointer
+}
+
+.white{background:white}
+.yellow{background:#ffeb3b}
+.red{background:#ff8a8a}
+.green{background:#00e676}
+
+.card{
+  background:white;
+  margin:12px 10px;
+  border-radius:18px;
+  padding:14px;
+  border:3px solid black
+}
+
+label{
+  font-size:13px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-top:10px;
+  font-weight:bold;
+  flex-wrap:wrap
+}
+
+.mic{
+  width:40px;
+  height:38px;
+  border:2px solid black;
+  border-radius:50%;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  background:white;
+  font-size:9px;
+  user-select:none;
+  touch-action:none
+}
+
+.mic.active{
+  background:#00e676;
+  transform:scale(1.15)
+}
+
+.mic.borrando{
+  background:#ff3b3b;
+  color:white
+}
+
+.del{
+  width:38px;
+  height:38px;
+  border:2px solid black;
+  border-radius:8px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  background:#ff8a8a;
+  font-size:9px;
+  font-weight:bold
+}
+
+input,textarea{
+  width:100%;
+  padding:10px;
+  border:2px solid black;
+  border-radius:10px;
+  font-family:Arial;
+  font-weight:bold;
+  font-size:15px;
+  margin-top:4px;
+  text-transform:uppercase
+}
+
+.ficha{
+  border:3px solid black;
+  border-radius:14px;
+  padding:10px;
+  margin-bottom:10px;
+  font-family:Arial
+}
+
+.ficha b{
+  font-size:16px
+}
+
+.ficha small{
+  font-family:Arial;
+  font-size:11px
+}
+
+.ficha button{
+  padding:7px 10px;
+  border:2px solid black;
+  border-radius:8px;
+  font-weight:bold;
+  margin-right:4px;
+  margin-top:4px
+}
+
+#estado{
+  font-family:Arial;
+  font-size:11px;
+  text-align:center
+}
+
+.searchbox{
+  display:none;
+  margin-top:10px
+}
+
+.searchbox input{
+  margin:0
+}
+
+.backup{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:10px
+}
+</style>
+</head>
+
+<body>
+
+<h1>AUTO - LOLO</h1>
+
+<div class="grid">
+<button class="btn white" onclick="nuevaFicha()">Nueva</button>
+<button class="btn white" onclick="mostrarBusqueda()">Buscar</button>
+<button class="btn yellow" onclick="recuperarFichas()">Fichas</button>
+</div>
+
+<div class="card">
+
+<div class="searchbox" id="searchbox">
+<input
+ id="busqueda"
+ placeholder="MATRÍCULA, CLIENTE, TELÉFONO..."
+ oninput="buscarEnVivo()">
+</div>
+
+<label>
+MATRÍCULA
+<span class="mic" data-campo="matricula">MIC</span>
+</label>
+<input id="matricula">
+
+<label>
+MARCA
+<span class="mic" data-campo="marca">MIC</span>
+MODELO
+<span class="mic" data-campo="modelo">MIC</span>
+</label>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<input id="marca">
+<input id="modelo">
+</div>
+
+<label>
+AÑO
+<span class="mic" data-campo="ano">MIC</span>
+TIPO
+<span class="mic" data-campo="tipo">MIC</span>
+</label>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<input id="ano" type="tel">
+<input id="tipo">
+</div>
+
+<label>
+CLIENTE
+<span class="mic" data-campo="cliente">MIC</span>
+</label>
+<input id="cliente">
+
+<label>
+TELÉFONO
+<span class="mic" data-campo="telefono">MIC</span>
+KM
+<span class="mic" data-campo="km">MIC</span>
+</label>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<input id="telefono">
+<input id="km" type="tel">
+</div>
+
+<label>
+AVERÍA
+<span class="mic" data-campo="averia">MIC+</span>
+<span class="del" onclick="borrarTodo('averia')">DEL</span>
+</label>
+<textarea id="averia"></textarea>
+
+<label>
+PIEZAS
+<span class="mic" data-campo="piezas">MIC+</span>
+<span class="del" onclick="borrarTodo('piezas')">DEL</span>
+<small style="font-family:Arial;font-size:9px">
+corto añade / largo borra última
+</small>
+</label>
+
+<textarea id="piezas" rows="4"></textarea>
+
+<label>
+NOTAS
+<span class="mic" data-campo="notas">MIC+</span>
+<span class="del" onclick="borrarTodo('notas')">DEL</span>
+</label>
+
+<textarea id="notas"></textarea>
+
+<button
+id="guardarBtn"
+class="btn"
+style="background:#0f3d9e;color:white;width:100%;margin-top:12px;font-size:18px"
+onclick="guardarFicha()">
+GUARDAR FICHA
+</button>
+
+<div class="backup">
+
+<button class="btn green" onclick="exportarDatos()">
+💾 EXPORTAR
+</button>
+
+<button class="btn white" onclick="document.getElementById('archivo').click()">
+📂 IMPORTAR
+</button>
+
+</div>
+
+<input
+id="archivo"
+type="file"
+accept=".json,application/json"
+style="display:none"
+onchange="importarDatos(event)">
+
+<button
+class="btn yellow"
+style="width:100%;margin-top:8px"
+onclick="verPapelera()">
+🗑️ PAPELERA
+</button>
+
+<p id="estado">
+V23 - EDICIÓN + BÚSQUEDA + VOZ NUMÉRICA
+</p>
+
+<p style="font-family:Arial;font-size:10px;text-align:center;margin:6px 0;color:#333">
+💡 Haz una COPIA EXPORTADA periódicamente para no perder tus fichas.
+</p>
+
+<div id="lista"></div>
+<button id="btnInicio" class="btn white" style="display:block; width:100%; margin-top:24px; position:sticky; bottom:16px" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆️ INICIO</button>
+</div>
+
+<script>
+
+/* =========================================================
+   CONFIGURACIÓN
+========================================================= */
+
+const CAMPOS=[
+  'matricula',
+  'marca',
+  'modelo',
+  'ano',
+  'tipo',
+  'cliente',
+  'telefono',
+  'km',
+  'averia',
+  'piezas',
+  'notas'
+];
+
+const colores=[
+  '#bbdefb',
+  '#fff9c4',
+  '#c8e6c9',
+  '#ffccbc',
+  '#d1c4e9'
+];
+
+let editandoId=null;
+let mostrandoPapelera=false;
+
+
+/* =========================================================
+   BASE DE DATOS
+========================================================= */
+
+function crearId(){
+  return Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+}
+
+
+/*
+   IMPORTANTE:
+   Esta función también repara las fichas antiguas
+   que no tengan ID.
+*/
+
+function getF(){
+
+  let arr=[];
+
+  try{
+    arr=JSON.parse(localStorage.getItem('autololo_v5')||'[]');
+
+    if(!Array.isArray(arr)) arr=[];
+
+  }catch(e){
+    arr=[];
+  }
+
+  let cambiado=false;
+
+  arr.forEach(f=>{
+
+    if(!f.id){
+
+      f.id=crearId();
+      cambiado=true;
+
+    }
+
+  });
+
+  if(cambiado){
+
+    try{
+      localStorage.setItem(
+        'autololo_v5',
+        JSON.stringify(arr)
+      );
+    }catch(e){}
+
+  }
+
+  return arr;
+}
+
+
+function setF(a){
+
+  try{
+
+    localStorage.setItem(
+      'autololo_v5',
+      JSON.stringify(a)
+    );
+
+  }catch(e){
+
+    alert(
+      'No se pudieron guardar los datos. '+
+      'Haz una COPIA EXPORTADA.'
+    );
+
+  }
+
+}
+
+
+function getP(){
+
+  try{
+
+    const p=JSON.parse(
+      localStorage.getItem('autololo_pap_v5')||'[]'
+    );
+
+    return Array.isArray(p)?p:[];
+
+  }catch(e){
+
+    return [];
+
+  }
+
+}
+
+
+function setP(a){
+
+  try{
+
+    localStorage.setItem(
+      'autololo_pap_v5',
+      JSON.stringify(a)
+    );
+
+  }catch(e){
+
+    alert(
+      'No se pudo guardar la papelera.'
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   NUEVA FICHA
+========================================================= */
+
+function nuevaFicha(){
+
+  CAMPOS.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.value='';
+  });
+
+  editandoId=null;
+
+  document.getElementById(
+    'guardarBtn'
+  ).textContent='GUARDAR FICHA';
+
+  document.getElementById(
+    'estado'
+  ).textContent='NUEVA FICHA';
+
+  /*
+     IMPORTANTE:
+     Al pulsar NUEVA se quita cualquier búsqueda
+     y se vuelven a mostrar TODAS las fichas.
+  */
+
+  document.getElementById('busqueda').value='';
+
+  document.getElementById('searchbox').style.display='none';
+
+  mostrandoPapelera=false;
+
+  pintar(getF());
+
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
+  });
+}
+
+
+/* =========================================================
+   BORRAR CAMPOS
+========================================================= */
+
+function borrarTodo(c){
+
+  if(
+    confirm('¿Borrar '+c+'?')
+  ){
+
+    document.getElementById(c).value='';
+
+  }
+
+}
+
+
+function borrarUltimaLinea(c){
+
+  const i=document.getElementById(c);
+
+  const l=i.value
+    .split('\n')
+    .filter(x=>x.trim()!=='');
+
+  if(l.length){
+
+    l.pop();
+
+    i.value=l.join('\n');
+
+    if(navigator.vibrate){
+
+      navigator.vibrate([80,40,80]);
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   NÚMEROS EN ESPAÑOL
+========================================================= */
+
+const unidades={
+  cero:0,
+  uno:1,
+  un:1,
+  una:1,
+  dos:2,
+  tres:3,
+  cuatro:4,
+  cinco:5,
+  seis:6,
+  siete:7,
+  ocho:8,
+  nueve:9
+};
+
+const especiales={
+  diez:10,
+  once:11,
+  doce:12,
+  trece:13,
+  catorce:14,
+  quince:15,
+  dieciseis:16,
+  diecisiete:17,
+  dieciocho:18,
+  diecinueve:19,
+  veinte:20,
+  veintiuno:21,
+  veintidos:22,
+  veintitres:23,
+  veinticuatro:24,
+  veinticinco:25,
+  veintiseis:26,
+  veintisiete:27,
+  veintiocho:28,
+  veintinueve:29
+};
+
+const decenas={
+  treinta:30,
+  cuarenta:40,
+  cincuenta:50,
+  sesenta:60,
+  setenta:70,
+  ochenta:80,
+  noventa:90
+};
+
+const centenas={
+  cien:100,
+  ciento:100,
+  doscientos:200,
+  trescientos:300,
+  cuatrocientos:400,
+  quinientos:500,
+  seiscientos:600,
+  setecientos:700,
+  ochocientos:800,
+  novecientos:900
+};
+
+
+function normalizarPalabra(s){
+
+  return s
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'');
+
+}
+
+
+/*
+   Convierte una frase numérica española
+   hasta millones.
+
+   Ejemplos:
+
+   "dos mil diecisiete" -> 2017
+   "doscientos ochenta y cinco mil
+    setecientos veintisiete" -> 285727
+*/
+
+function numeroEspanol(frase){
+
+  let t=normalizarPalabra(frase)
+    .replace(/-/g,' ')
+    .replace(/\s+/g,' ')
+    .trim();
+
+  if(!t)return null;
+
+  let palabras=t.split(' ')
+    .filter(x=>x!=='y');
+
+  if(!palabras.length)return null;
+
+  let total=0;
+  let grupo=0;
+  let valido=false;
+
+  for(let p of palabras){
+
+    if(unidades[p]!==undefined){
+
+      grupo+=unidades[p];
+      valido=true;
+      continue;
+
+    }
+
+    if(especiales[p]!==undefined){
+
+      grupo+=especiales[p];
+      valido=true;
+      continue;
+
+    }
+
+    if(decenas[p]!==undefined){
+
+      grupo+=decenas[p];
+      valido=true;
+      continue;
+
+    }
+
+    if(centenas[p]!==undefined){
+
+      grupo+=centenas[p];
+      valido=true;
+      continue;
+
+    }
+
+    if(p==='mil'){
+
+      if(grupo===0)grupo=1;
+
+      total+=grupo*1000;
+      grupo=0;
+      valido=true;
+      continue;
+
+    }
+
+    if(p==='millon'||p==='millones'){
+
+      if(grupo===0)grupo=1;
+
+      total+=grupo*1000000;
+      grupo=0;
+      valido=true;
+      continue;
+
+    }
+
+    /*
+       Si aparece una palabra que no es número,
+       dejamos de interpretar.
+    */
+
+    return null;
+
+  }
+
+  if(!valido)return null;
+
+  return total+grupo;
+
+}
+
+
+/* =========================================================
+   CONVERSIÓN DE NÚMEROS DENTRO DE TEXTO
+========================================================= */
+
+const palabrasNumero=[
+  'cero','uno','un','una','dos','tres','cuatro','cinco',
+  'seis','siete','ocho','nueve','diez','once','doce','trece',
+  'catorce','quince','dieciseis','diecisiete','dieciocho',
+  'diecinueve','veinte','veintiuno','veintidos','veintitres',
+  'veinticuatro','veinticinco','veintiseis','veintisiete',
+  'veintiocho','veintinueve','treinta','cuarenta','cincuenta',
+  'sesenta','setenta','ochenta','noventa','cien','ciento',
+  'doscientos','trescientos','cuatrocientos','quinientos',
+  'seiscientos','setecientos','ochocientos','novecientos',
+  'mil','millon','millones','y'
+];
+
+
+function convertirNumerosEnTexto(texto){
+
+  if(!texto)return '';
+
+  /*
+     Primero protegemos números que ya vienen
+     como cifras.
+  */
+
+  const palabras=texto
+    .toLowerCase()
+    .replace(/[.,!?;:]/g,' ')
+    .split(/\s+/)
+    .filter(Boolean);
+
+  let salida=[];
+  let i=0;
+
+  while(i<palabras.length){
+
+    const palabraNormal=normalizarPalabra(
+      palabras[i]
+    );
+
+    /*
+       Si es una palabra numérica intentamos
+       formar la secuencia completa.
+    */
+
+    if(palabrasNumero.includes(palabraNormal)){
+
+      let mejor=null;
+      let mejorFin=i+1;
+
+      for(
+        let fin=i+1;
+        fin<=Math.min(
+          palabras.length,
+          i+12
+        );
+        fin++
+      ){
+
+        const grupo=palabras
+          .slice(i,fin)
+          .map(normalizarPalabra)
+          .join(' ');
+
+        const n=numeroEspanol(grupo);
+
+        if(n!==null){
+
+          mejor=n;
+          mejorFin=fin;
+
+        }
+
+      }
+
+      if(mejor!==null){
+
+        salida.push(String(mejor));
+        i=mejorFin;
+        continue;
+
+      }
+
+    }
+
+    salida.push(palabras[i]);
+    i++;
+
+  }
+
+  return salida.join(' ');
+}
+
+
+/* =========================================================
+   LETRAS DE MATRÍCULA DICTADAS
+========================================================= */
+
+const letrasMatricula={
+
+  'a':'A',
+  'be':'B',
+  'ce':'C',
+  'de':'D',
+  'e':'E',
+  'efe':'F',
+  'ge':'G',
+  'hache':'H',
+  'i':'I',
+  'jota':'J',
+  'ka':'K',
+  'ele':'L',
+  'eme':'M',
+  'ene':'N',
+  'eñe':'Ñ',
+  'o':'O',
+  'pe':'P',
+  'cu':'Q',
+  'erre':'R',
+  'ese':'S',
+  'te':'T',
+  'u':'U',
+  'uve':'V',
+  'uve doble':'W',
+  'doble uve':'W',
+  'equis':'X',
+  'ye':'Y',
+  'i griega':'Y',
+  'zeta':'Z'
+
+};
+
+
+function convertirLetrasMatricula(txt){
+
+  let t=normalizarPalabra(txt);
+
+  /*
+     Letras que el reconocimiento puede separar
+     con guiones o signos.
+  */
+
+  t=t
+    .replace(/uve doble/g,' W ')
+    .replace(/doble uve/g,' W ')
+    .replace(/i griega/g,' Y ')
+    .replace(/eñe/g,' Ñ ');
+
+  const partes=t
+    .replace(/[.,;:-]/g,' ')
+    .split(/\s+/)
+    .filter(Boolean);
+
+  let resultado='';
+
+  for(const p of partes){
+
+    if(letrasMatricula[p]){
+
+      resultado+=letrasMatricula[p];
+
+    }
+
+  }
+
+  return resultado;
+
+}
+
+
+/* =========================================================
+   MATRÍCULA
+========================================================= */
+
+function palabrasANumeroMatricula(txtRaw){
+
+  if(!txtRaw)return '';
+
+  let txt=txtRaw.trim();
+
+  /*
+     Si ya contiene una matrícula normal,
+     por ejemplo 1234ABC, la conservamos.
+  */
+
+  const directo=txt
+    .toUpperCase()
+    .replace(/[^0-9A-Z]/g,'');
+
+  if(
+    /^\d{4}[A-Z]{1,3}$/.test(directo)
+  ){
+
+    return directo;
+
+  }
+
+
+  /*
+     Convertimos la parte numérica hablada.
+     Ejemplo:
+     "mil ciento treinta y nueve ce te ele"
+  */
+
+  const palabras=normalizarPalabra(txt)
+    .split(/\s+/)
+    .filter(Boolean);
+
+  let numeroTexto=[];
+  let letrasTexto=[];
+
+  let i=0;
+
+  while(i<palabras.length){
+
+    const p=palabras[i];
+
+    if(
+      palabrasNumero.includes(p)
+    ){
+
+      numeroTexto.push(p);
+
+    }else{
+
+      letrasTexto.push(p);
+
+    }
+
+    i++;
+
+  }
+
+  let numero='';
+
+  if(numeroTexto.length){
+
+    const n=numeroEspanol(
+      numeroTexto.join(' ')
+    );
+
+    if(n!==null){
+
+      numero=String(n);
+
+    }
+
+  }
+
+
+  /*
+     Si el reconocimiento ya devuelve dígitos,
+     los aprovechamos.
+  */
+
+  const digitos=txt.match(/\d+/g);
+
+  if(digitos && digitos.join('').length){
+
+    numero=digitos.join('');
+
+  }
+
+  /*
+     Nos quedamos con los últimos 4 números
+     para una matrícula española.
+  */
+
+  if(numero.length>=4){
+
+    numero=numero.slice(-4);
+
+  }
+
+
+  /*
+     Letras:
+     "ce te ele" -> CTL
+  */
+
+  let letras='';
+
+  for(const p of letrasTexto){
+
+    if(letrasMatricula[p]){
+
+      letras+=letrasMatricula[p];
+
+    }
+
+  }
+
+
+  /*
+     Si quedaron letras normales, también
+     las aprovechamos.
+  */
+
+  if(!letras && letrasTexto.length){
+
+    letras=letrasTexto
+      .join('')
+      .replace(/[^A-ZÑ]/gi,'')
+      .toUpperCase();
+
+  }
+
+
+  letras=letras.slice(0,3);
+
+  if(numero){
+
+    return numero+letras;
+
+  }
+
+  return directo;
+
+}
+
+
+/* =========================================================
+   CONVERSIÓN DE VOZ SEGÚN CAMPO
+========================================================= */
+
+function convertirVoz(texto,campo){
+
+  if(campo==='matricula'){
+
+    return palabrasANumeroMatricula(texto);
+
+  }
+
+
+  /*
+     Campos numéricos:
+     año, km y teléfono.
+  */
+
+  if(
+    campo==='km' ||
+    campo==='telefono' ||
+    campo==='ano'
+  ){
+
+    const convertido=
+      convertirNumerosEnTexto(texto);
+
+    return convertido
+      .replace(/\D/g,'');
+
+  }
+
+
+  /*
+     En avería, piezas y notas conservamos
+     el texto pero convertimos números hablados
+     a cifras.
+  */
+
+  if(
+    campo==='averia' ||
+    campo==='piezas' ||
+    campo==='notas'
+  ){
+
+    return convertirNumerosEnTexto(texto)
+      .toUpperCase();
+
+  }
+
+
+  return texto.toUpperCase();
+
+}
+
+
+/* =========================================================
+   GUARDAR
+========================================================= */
+
+function guardarFicha(){
+
+  const m=document
+    .getElementById('matricula')
+    .value
+    .trim()
+    .toUpperCase();
+
+  if(!m){
+
+    alert('Pon matrícula');
+    return;
+
+  }
+
+  let arr=getF();
+
+  const datos={};
+
+  CAMPOS.forEach(k=>{
+
+    datos[k]=document
+      .getElementById(k)
+      .value
+      .toUpperCase();
+
+  });
+
+  datos.matricula=m;
+
+
+  if(editandoId){
+
+    const idx=arr.findIndex(
+      x=>x.id===editandoId
+    );
+
+    if(idx>=0){
+
+      datos.id=editandoId;
+
+      datos.fecha=
+        arr[idx].fecha ||
+        new Date().toLocaleString('es-ES');
+
+      datos.modificado=
+        new Date().toLocaleString('es-ES');
+
+      arr[idx]=datos;
+
+      setF(arr);
+
+      document.getElementById(
+        'estado'
+      ).textContent=
+        '✓ FICHA ACTUALIZADA '+m;
+
+    }
+
+  }else{
+
+    datos.id=crearId();
+
+    datos.fecha=
+      new Date().toLocaleString('es-ES');
+
+    arr.unshift(datos);
+
+    setF(arr);
+
+    document.getElementById(
+      'estado'
+    ).textContent=
+      '✓ GUARDADO '+m;
+
+  }
+
+  editandoId=null;
+
+  document.getElementById(
+    'guardarBtn'
+  ).textContent='GUARDAR FICHA';
+
+  recuperarFichas();
+
+}
+
+
+/* =========================================================
+   SEGURIDAD HTML
+========================================================= */
+
+function escapar(s){
+
+  return String(s??'')
+    .replace(
+      /[&<>"']/g,
+      c=>({
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        '"':'&quot;',
+        "'":'&#39;'
+      }[c])
+    );
+
+}
+
+
+/* =========================================================
+   MOSTRAR FICHAS
+========================================================= */
+
+function pintar(arr,papelera=false){
+
+  const d=document.getElementById('lista');
+
+  d.innerHTML=arr.length
+    ?arr.map((f,i)=>{
+
+      /*
+         Si por alguna razón una ficha antigua
+         aún no tuviera ID, se le crea aquí.
+      */
+
+      if(!f.id){
+
+        f.id=crearId();
+
+      }
+
+      const col=
+        colores[i%colores.length];
+
+      const botones=papelera
+
+        ?`
+
+        <button onclick="restaurarFicha('${f.id}')">
+        ♻️ Restaurar
+        </button>
+
+        <button onclick="borrarDefinitivo('${f.id}')">
+        ❌ Eliminar
+        </button>
+
+        `
+
+        :`
+
+        <button onclick="cargarFicha('${f.id}')">
+        ✏️ Editar
+        </button>
+
+        <button onclick="borrarFicha('${f.id}')">
+        🗑️ Papelera
+        </button>
+
+        `;
+
+      return `
+
+      <div class="ficha" style="background:${col}">
+
+        <b>${escapar(f.matricula)}</b>
+
+        <small>
+        📅 ${escapar(f.fecha||'')}
+        </small>
+
+        <br>
+
+        <small>
+        ${escapar(f.marca||'')}
+        ${escapar(f.modelo||'')}
+        ${escapar(f.ano||'')}
+        ${escapar(f.tipo||'')}
+        </small>
+
+        <br>
+
+        <small>
+        👤 ${escapar(f.cliente||'')}
+        ${escapar(f.telefono||'')}
+        - ${escapar(f.km||'')} KM
+        </small>
+
+        <br>
+
+        <small>
+        🔧 ${escapar(
+          (f.averia||'').slice(0,100)
+        )}
+        </small>
+
+        <div style="margin-top:6px">
+        ${botones}
+        </div>
+
+      </div>
+
+      `;
+
+    }).join('')
+
+    :
+
+    `<p style="font-family:Arial;text-align:center">
+    No hay fichas
+    </p>`;
+
+}
+
+
+/* =========================================================
+   TODAS LAS FICHAS
+========================================================= */
+
+function recuperarFichas(){
+
+  mostrandoPapelera=false;
+
+  pintar(getF());
+
+  document.getElementById(
+    'estado'
+  ).textContent=
+    'FICHAS ACTIVAS: '+getF().length;
+
+}
+
+
+/* =========================================================
+   BUSCAR
+========================================================= */
+
+function mostrarBusqueda(){
+
+  const b=
+    document.getElementById('searchbox');
+
+  b.style.display=
+    b.style.display==='none'
+      ?'block'
+      :'none';
+
+  if(b.style.display==='block'){
+
+    document
+      .getElementById('busqueda')
+      .focus();
+
+  }
+
+}
+
+
+function buscarEnVivo(){
+
+  const q=
+    document
+      .getElementById('busqueda')
+      .value
+      .trim()
+      .toUpperCase();
+
+  if(!q){
+
+    recuperarFichas();
+    return;
+
+  }
+
+  const arr=getF().filter(f=>{
+
+    const texto=
+      CAMPOS
+        .map(k=>f[k]||'')
+        .join(' ')
+        .toUpperCase();
+
+    return texto.includes(q);
+
+  });
+
+  mostrandoPapelera=false;
+
+  pintar(arr);
+
+  document.getElementById(
+    'estado'
+  ).textContent=
+    'RESULTADOS: '+arr.length;
+
+}
+
+
+/* =========================================================
+   EDITAR FICHA
+========================================================= */
+
+function cargarFicha(id){
+
+  /*
+     Esto permite editar tanto fichas nuevas
+     como fichas antiguas reparadas.
+  */
+
+  const f=getF().find(
+    x=>String(x.id)===String(id)
+  );
+
+  if(!f){
+
+    alert('No se ha encontrado la ficha.');
+    return;
+
+  }
+
+  CAMPOS.forEach(k=>{
+
+    const el=document.getElementById(k);
+
+    if(el){
+
+      el.value=f[k]||'';
+
+    }
+
+  });
+
+  editandoId=f.id;
+
+  document.getElementById(
+    'guardarBtn'
+  ).textContent=
+    'ACTUALIZAR FICHA';
+
+  document.getElementById(
+    'estado'
+  ).textContent=
+    'EDITANDO '+(f.matricula||'');
+
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
+  });
+
+}
+
+
+/* =========================================================
+   PAPELERA
+========================================================= */
+
+function borrarFicha(id){
+
+  const arr=getF();
+
+  const idx=arr.findIndex(
+    x=>String(x.id)===String(id)
+  );
+
+  if(idx<0)return;
+
+  if(
+    !confirm(
+      '¿Enviar esta ficha a la papelera?'
+    )
+  )return;
+
+  const f=arr.splice(idx,1)[0];
+
+  f.borrado=
+    new Date().toLocaleString('es-ES');
+
+  const p=getP();
+
+  p.unshift(f);
+
+  setP(p);
+  setF(arr);
+
+  recuperarFichas();
+
+}
+
+
+function verPapelera(){
+
+  mostrandoPapelera=true;
+
+  pintar(getP(),true);
+
+  document.getElementById(
+    'estado'
+  ).textContent=
+    'PAPELERA: '+getP().length;
+
+}
+
+
+function restaurarFicha(id){
+
+  const p=getP();
+
+  const idx=p.findIndex(
+    x=>String(x.id)===String(id)
+  );
+
+  if(idx<0)return;
+
+  const f=p.splice(idx,1)[0];
+
+  delete f.borrado;
+
+  const a=getF();
+
+  /*
+     Si la ficha restaurada no tiene ID,
+     también se lo ponemos.
+  */
+
+  if(!f.id){
+
+    f.id=crearId();
+
+  }
+
+  a.unshift(f);
+
+  setP(p);
+  setF(a);
+
+  recuperarFichas();
+
+  document.getElementById(
+    'estado'
+  ).textContent=
+    '✓ FICHA RESTAURADA: '+
+    (f.matricula||'');
+
+}
+
+
+function borrarDefinitivo(id){
+
+  if(
+    !confirm(
+      '¿ELIMINAR DEFINITIVAMENTE esta ficha?'
+    )
+  )return;
+
+  setP(
+    getP().filter(
+      x=>String(x.id)!==String(id)
+    )
+  );
+
+  verPapelera();
+
+}
+
+
+/* =========================================================
+   EXPORTAR
+========================================================= */
+
+function exportarDatos(){
+
+  const datos={
+
+    version:'AUTO-LOLO V23',
+
+    fecha:new Date().toISOString(),
+
+    fichas:getF(),
+
+    papelera:getP()
+
+  };
+
+  const blob=new Blob(
+    [
+      JSON.stringify(
+        datos,
+        null,
+        2
+      )
+    ],
+    {
+      type:'application/json'
+    }
+  );
+
+  const url=
+    URL.createObjectURL(blob);
+
+  const a=
+    document.createElement('a');
+
+  a.href=url;
+
+  a.download=
+    'AUTO-LOLO-backup-'+
+    new Date()
+      .toISOString()
+      .slice(0,10)+
+    '.json';
+
+  a.click();
+
+  URL.revokeObjectURL(url);
+
+  document.getElementById(
+    'estado'
+  ).textContent=
+    '✓ COPIA EXPORTADA';
+
+}
+
+
+/* =========================================================
+   IMPORTAR
+========================================================= */
+
+function importarDatos(e){
+
+  const file=e.target.files[0];
+
+  if(!file)return;
+
+  const r=new FileReader();
+
+  r.onload=()=>{
+
+    try{
+
+      const datos=
+        JSON.parse(r.result);
+
+      if(
+        !Array.isArray(datos.fichas) ||
+        !Array.isArray(datos.papelera)
+      ){
+
+        throw new Error();
+
+      }
+
+      if(
+        !confirm(
+          '¿Importar la copia? '+
+          'Se reemplazarán las fichas actuales.'
+        )
+      )return;
+
+      /*
+         Reparamos también los IDs
+         de copias antiguas.
+      */
+
+      datos.fichas.forEach(f=>{
+
+        if(!f.id)f.id=crearId();
+
+      });
+
+      datos.papelera.forEach(f=>{
+
+        if(!f.id)f.id=crearId();
+
+      });
+
+      setF(datos.fichas);
+      setP(datos.papelera);
+
+      recuperarFichas();
+
+      document.getElementById(
+        'estado'
+      ).textContent=
+        '✓ COPIA IMPORTADA';
+
+    }catch(err){
+
+      alert(
+        'Archivo de copia no válido.'
+      );
+
+    }
+
+  };
+
+  r.readAsText(file);
+
+  e.target.value='';
+
+}
+
+
+/* =========================================================
+   RECONOCIMIENTO DE VOZ
+========================================================= */
+
+let rec=null;
+
+let campoActual='matricula';
+
+let modoBorrar=false;
+
+if(
+  window.SpeechRecognition ||
+  window.webkitSpeechRecognition
+){
+
+  const SR=
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  rec=new SR();
+
+  rec.lang='es-ES';
+
+  rec.interimResults=false;
+
+  rec.continuous=false;
+
+  rec.maxAlternatives=3;
+
+
+  rec.onresult=e=>{
+
+    /*
+       Cogemos la alternativa con mejor
+       confianza disponible.
+    */
+
+    let resultado=e.results[0][0];
+
+    const t=
+      resultado.transcript.trim();
+
+    const c=
+      convertirVoz(
+        t,
+        campoActual
+      );
+
+    const inp=
+      document.getElementById(
+        campoActual
+      );
+
+    /*
+       Campos de texto largos:
+       cada dictado nuevo se añade debajo.
+    */
+
+    if(
+      (
+        campoActual==='piezas' ||
+        campoActual==='averia' ||
+        campoActual==='notas'
+      ) &&
+      !modoBorrar
+    ){
+
+      inp.value=
+        inp.value.trim()
+          ?inp.value.trim()+
+            '\n'+c
+          :c;
+
+    }else{
+
+      inp.value=c;
+
+    }
+
+    document.getElementById(
+      'estado'
+    ).textContent=
+      '✓ '+t+' → '+c;
+
+    modoBorrar=false;
+
+  };
+
+
+  rec.onerror=e=>{
+
+    document.getElementById(
+      'estado'
+    ).textContent=
+      'MICRÓFONO: '+e.error;
+
+  };
+
+
+  rec.onend=()=>{
+
+    document
+      .querySelectorAll('.mic')
+      .forEach(m=>{
+
+        m.classList.remove(
+          'active',
+          'borrando'
+        );
+
+      });
+
+  };
+
+}
+
+
+/* =========================================================
+   INICIAR DICTADO
+========================================================= */
+
+function dictarConModo(
+  campo,
+  borrar,
+  borrarUlt=false
+){
+
+  if(borrarUlt){
+
+    borrarUltimaLinea(campo);
+
+    return;
+
+  }
+
+  campoActual=campo;
+
+  modoBorrar=borrar;
+
+  if(!rec){
+
+    alert(
+      'Usa Chrome y permite el acceso al micrófono.'
+    );
+
+    return;
+
+  }
+
+  try{
+
+    rec.start();
+
+  }catch(e){
+
+    /*
+       Si ya estaba escuchando no hacemos nada.
+    */
+
+  }
+
+}
+
+
+/* =========================================================
+   BOTONES MICRÓFONO
+========================================================= */
+
+let pt=null;
+
+let lp=false;
+
+document
+  .querySelectorAll('.mic')
+  .forEach(mic=>{
+
+  const st=e=>{
+
+    e.preventDefault();
+
+    lp=false;
+
+    mic.classList.add('active');
+
+    pt=setTimeout(()=>{
+
+      lp=true;
+
+      mic.classList.remove('active');
+
+      mic.classList.add('borrando');
+
+      /*
+         Pulsación larga:
+         borra la última línea.
+      */
+
+      dictarConModo(
+        mic.dataset.campo,
+        false,
+        true
+      );
+
+    },900);
+
+  };
+
+
+  const en=e=>{
+
+    e.preventDefault();
+
+    clearTimeout(pt);
+
+    if(!lp){
+
+      mic.classList.remove('active');
+
+      dictarConModo(
+        mic.dataset.campo,
+        false,
+        false
+      );
+
+    }else{
+
+      setTimeout(
+        ()=>mic.classList.remove('borrando'),
+        600
+      );
+
+    }
+
+  };
+
+
+  mic.addEventListener(
+    'touchstart',
+    st,
+    {passive:false}
+  );
+
+  mic.addEventListener(
+    'touchend',
+    en,
+    {passive:false}
+  );
+
+  mic.addEventListener(
+    'mousedown',
+    st
+  );
+
+  mic.addEventListener(
+    'mouseup',
+    en
+  );
+
+});
+
+
+/* =========================================================
+   INICIO
+========================================================= */
+
+recuperarFichas();
+
+</script>
+
+</body>
+</html>
