@@ -238,7 +238,7 @@ AVERÍA
 <span class="mic" data-campo="averia">MIC+</span>
 <span class="del" onclick="borrarTodo('averia')">DEL</span>
 </label>
-<textarea id="averia"></textarea>
+<textarea id="averia" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
 
 <label>
 PIEZAS
@@ -249,7 +249,7 @@ corto añade / largo borra última
 </small>
 </label>
 
-<textarea id="piezas" rows="4"></textarea>
+<textarea id="piezas" rows="4" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
 
 <label>
 NOTAS
@@ -257,7 +257,7 @@ NOTAS
 <span class="del" onclick="borrarTodo('notas')">DEL</span>
 </label>
 
-<textarea id="notas"></textarea>
+<textarea id="notas" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
 
 <button
 id="guardarBtn"
